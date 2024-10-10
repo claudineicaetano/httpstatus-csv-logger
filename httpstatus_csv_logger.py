@@ -2,6 +2,7 @@ import csv
 import time
 import requests
 from requests.auth import HTTPProxyAuth
+import json
 
 def read_cpfs(csv_file):
     cpfs = []
@@ -39,14 +40,20 @@ def read_processed_cpfs(csv_file):
         pass
     return processed_cpfs
 
+def read_credentials(credentials_file):
+    with open(credentials_file, 'r') as file:
+        return json.load(file)
+
 def main():
     input_csv = 'input.csv'
     output_csv = 'output.csv'
     endpoint = 'https://your-api-endpoint.com/api'
+    credentials_file = 'credentials.json'
 
-    proxy_url = 'http://your-proxy-url:port'
-    proxy_user = 'your-proxy-username'
-    proxy_pass = 'your-proxy-password'
+    credentials = read_credentials(credentials_file)
+    proxy_url = credentials['proxy_url']
+    proxy_user = credentials['proxy_user']
+    proxy_pass = credentials['proxy_pass']
     proxies = {
         'http': proxy_url,
         'https': proxy_url,
